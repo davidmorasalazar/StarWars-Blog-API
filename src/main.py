@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User
+from models import db, User, Favorites, Characters, Planets
 #from models import Person
 
 app = Flask(__name__)
@@ -33,11 +33,61 @@ def sitemap():
 @app.route('/user', methods=['GET'])
 def handle_hello():
 
-    response_body = {
-        "msg": "Hello, this is your GET /user response "
-    }
+    # get all the todos
+    query = User.query.all()
+    # map the results and your list of people  inside of the all_people variable
+    results = list(map(lambda x: x.serialize(), query))
+    return jsonify(results), 200
 
-    return jsonify(response_body), 200
+@app.route('/get_favorites', methods=['GET'])
+def get_favorites():
+
+    # get all the todos
+    query = Favorites.query.all()
+
+    # map the results and your list of people  inside of the all_people variable
+    results = list(map(lambda x: x.serialize(), query))
+
+    return jsonify(results), 200
+
+@app.route('/get_characters', methods=['GET'])
+def get_characters():
+
+    # get all the todos
+    query = Characters.query.all()
+
+    # map the results and your list of people  inside of the all_people variable
+    results = list(map(lambda x: x.serialize(), query))
+
+    return jsonify(results), 200
+
+@app.route('/get_planets', methods=['GET'])
+def get_planets():
+
+    # get all the todos
+    query = Planets.query.all()
+
+    # map the results and your list of people  inside of the all_people variable
+    results = list(map(lambda x: x.serialize(), query))
+
+    return jsonify(results), 200
+
+@app.route('/get_planets/<int:id>', methods=['GET'])
+def handle_planet(id):
+
+    # get all the todos
+    vuelta = Planets.query.get(id)
+    # map the results and your list of people  inside of the all_people variable
+    return jsonify(vuelta.serialize()), 200
+
+@app.route('/get_characters/<int:id>', methods=['GET'])
+def handle_character(id):
+
+    # get all the todos
+    vuelta = Characters.query.get(id)
+    # map the results and your list of people  inside of the all_people variable
+    return jsonify(vuelta.serialize()), 200
+
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':

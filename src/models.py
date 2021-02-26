@@ -35,8 +35,17 @@ class Favorites(db.Model):
 
 class Characters(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    label = db.Column(db.String(80), unique=False, nullable=False)
-    done = db.Column(db.Boolean(), unique=False, nullable=False)
+    height = db.Column(db.Integer, unique=False, nullable=False)
+    mass = db.Column(db.Integer, unique=False, nullable=False)
+    hair_color = db.Column(db.String(80), unique=False, nullable=False)
+    skin_color = db.Column(db.String(80), unique=False, nullable=False)
+    eye_color = db.Column(db.String(80), unique=False, nullable=False)
+    birth_year = db.Column(db.String(80), unique=False, nullable=False)
+    gender = db.Column(db.String(80), unique=False, nullable=False)
+    name = db.Column(db.String(80), unique=False, nullable=False)
+    homeworld = db.Column(db.String(80), unique=False, nullable=False)
+    url = db.Column(db.String(80), unique=False, nullable=False)
+    # done = db.Column(db.Boolean(), unique=False, nullable=False)
 
     def __repr__(self):
         return '<User %r>' % self.username
@@ -44,15 +53,32 @@ class Characters(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "label": self.label,
-            "done": self.done,
+            "height": self.height,
+            "mass": self.mass,
+            "hair_color": self.hair_color,
+            "skin_color": self.skin_color,
+            "eye_color": self.eye_color,
+            "birth_year": self.birth_year,
+            "gender": self.gender,
+            "name": self.name,
+            "homeworld": self.homeworld,
+            "url": self.url            
             # do not serialize the password, its a security breach
         }
         
 class Planets(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    label = db.Column(db.String(80), unique=False, nullable=False)
-    done = db.Column(db.Boolean(), unique=False, nullable=False)
+    diameter = db.Column(db.Integer, unique=False, nullable=False)
+    rotation_period = db.Column(db.Integer, unique=False, nullable=False)
+    orbital_period = db.Column(db.Integer, unique=False, nullable=False)
+    gravity = db.Column(db.String(80), unique=False, nullable=False)
+    population = db.Column(db.Integer, unique=False, nullable=False)
+    climate = db.Column(db.String(80), unique=False, nullable=False)
+    terrain = db.Column(db.String(80), unique=False, nullable=False)
+    surface_water = db.Column(db.Integer, unique=False, nullable=False)
+    name = db.Column(db.String(80), unique=False, nullable=False)
+    url = db.Column(db.String(80), unique=False, nullable=False)
+    # done = db.Column(db.Boolean(), unique=False, nullable=False)
 
     def __repr__(self):
         return '<User %r>' % self.username
@@ -60,7 +86,16 @@ class Planets(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "label": self.label,
-            "done": self.done,
+            "diameter": self.diameter,
+            "rotation_period": self.rotation_period,
+            "orbital_period": self.orbital_period,
+            "gravity": self.gravity,
+            "population": self.population,
+            "climate": self.climate,
+            "terrain": self.terrain,
+            "surface_water": self.surface_water,
+            "name": self.name,
+            "url": self.url,
+           
             # do not serialize the password, its a security breach
         }

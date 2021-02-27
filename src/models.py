@@ -19,17 +19,19 @@ class User(db.Model):
         }
 class Favorites(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    label = db.Column(db.String(80), unique=False, nullable=False)
-    done = db.Column(db.Boolean(), unique=False, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    name = db.Column(db.String(80), unique=False, nullable=False)
+    object_id = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<Favorites %r>' % self.id
 
     def serialize(self):
         return {
             "id": self.id,
-            "label": self.label,
-            "done": self.done,
+            "name": self.name,
+            "user_id": self.user_id,
+            "object_id": self.object_id,            
             # do not serialize the password, its a security breach
         }
 
@@ -48,7 +50,7 @@ class Characters(db.Model):
     # done = db.Column(db.Boolean(), unique=False, nullable=False)
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<Characters %r>' % self.id
 
     def serialize(self):
         return {
@@ -81,7 +83,7 @@ class Planets(db.Model):
     # done = db.Column(db.Boolean(), unique=False, nullable=False)
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<Planets %r>' % self.id
 
     def serialize(self):
         return {

@@ -87,6 +87,21 @@ def handle_character(id):
     vuelta = Characters.query.get(id)
     # map the results and your list of people  inside of the all_people variable
     return jsonify(vuelta.serialize()), 200
+#Favorites and Users:
+@app.route('/user/<int:userid>/get_favorites', methods=['GET'])
+def get_user_favorite(userid):
+    favorites = Favorites.query.filter_by(user_userid= userid)
+    result = list(map(lambda x: x.serialize(), favorites))
+    return jsonify(result), 200
+
+@app.route('/user/<int:userid>/get_favorites', methods=['POST'])
+def add_user_favorite(userid):
+    post_favorites = request.get_json()
+    add_favorites = Favorites(user_userid=userid, object_id = post_favorites["object_id"], name=post_favorites["name"])
+    db.session.add(add_favorites)
+    db.session.commit()
+    return jsonify(result), 200
+
 
 
 # this only runs if `$ python src/main.py` is executed

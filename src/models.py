@@ -9,7 +9,7 @@ class User(db.Model):
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<User %r>' % self.name
 
     def serialize(self):
         return {
@@ -19,8 +19,8 @@ class User(db.Model):
         }
 class Favorites(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
-    name = db.Column(db.String(80), unique=False, nullable=False)
+    user_userid = db.Column(db.Integer, db.ForeignKey("User.id"))
+    name = db.Column(db.String(80))
     object_id = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
@@ -30,7 +30,7 @@ class Favorites(db.Model):
         return {
             "id": self.id,
             "name": self.name,
-            "user_id": self.user_id,
+            "user_userid": self.user_userid,
             "object_id": self.object_id,            
             # do not serialize the password, its a security breach
         }
@@ -50,7 +50,7 @@ class Characters(db.Model):
     # done = db.Column(db.Boolean(), unique=False, nullable=False)
 
     def __repr__(self):
-        return '<Characters %r>' % self.id
+        return '<Characters %r>' % self.name
 
     def serialize(self):
         return {
@@ -83,7 +83,7 @@ class Planets(db.Model):
     # done = db.Column(db.Boolean(), unique=False, nullable=False)
 
     def __repr__(self):
-        return '<Planets %r>' % self.id
+        return '<Planets %r>' % self.full_name
 
     def serialize(self):
         return {

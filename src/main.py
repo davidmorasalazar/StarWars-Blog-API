@@ -39,16 +39,16 @@ def handle_hello():
     results = list(map(lambda x: x.serialize(), query))
     return jsonify(results), 200
 
-@app.route('/get_favorites', methods=['GET'])
-def get_favorites():
+# @app.route('/get_favorites', methods=['GET'])
+# def get_favorites():
 
-    # get all the todos
-    query = Favorites.query.all()
+#     # get all the todos
+#     query = Favorites.query.all()
 
-    # map the results and your list of people  inside of the all_people variable
-    results = list(map(lambda x: x.serialize(), query))
+#     # map the results and your list of people  inside of the all_people variable
+#     results = list(map(lambda x: x.serialize(), query))
 
-    return jsonify(results), 200
+#     return jsonify(results), 200
 
 @app.route('/get_characters', methods=['GET'])
 def get_characters():
@@ -72,37 +72,76 @@ def get_planets():
 
     return jsonify(results), 200
 
-@app.route('/get_planets/<int:id>', methods=['GET'])
-def handle_planet(id):
+@app.route('/get_planets/<int:planid>', methods=['GET'])
+def handle_planet(planid):
 
     # get all the todos
-    vuelta = Planets.query.get(id)
+    planeta = Planets.query.get(planid)
     # map the results and your list of people  inside of the all_people variable
-    return jsonify(vuelta.serialize()), 200
+    return jsonify(planeta.serialize()), 200
 
-@app.route('/get_characters/<int:id>', methods=['GET'])
-def handle_character(id):
+@app.route('/get_characters/<int:chaid>', methods=['GET'])
+def handle_character(chaid):
 
     # get all the todos
-    vuelta = Characters.query.get(id)
+    persona = Characters.query.get(chaid)
     # map the results and your list of people  inside of the all_people variable
-    return jsonify(vuelta.serialize()), 200
+    return jsonify(persona.serialize()), 200
 #Favorites and Users:
-@app.route('/user/<int:userid>/get_favorites', methods=['GET'])
+# @app.route('/user/<int:userid>/get_favorites', methods=['POST'])
+# def add_user_favorite(userid):
+#     post_favorites = request.get_json()
+#     add_favorites = Favorites(user_userid=userid, object_id = post_favorites["object_id"], name=post_favorites["name"])
+#     db.session.add(add_favorites)
+#     db.session.commit()
+#     return jsonify(result), 200
+
+
+@app.route('/users/<int:userid>/get_favorites', methods=['GET'])
 def get_user_favorite(userid):
-    favorites = Favorites.query.filter_by(user_userid= userid)
-    result = list(map(lambda x: x.serialize(), favorites))
-    return jsonify(result), 200
+    favorites = Favorites.query.filter_by(user_userid = userid)
+    # favorites = Favorites.query.all()
+    # print(favorites)
+    results = list(map(lambda x: x.serialize(), favorites))
+    # print(results)
+    return jsonify(results), 200
+    # return jsonify("hola"), 200
 
-@app.route('/user/<int:userid>/get_favorites', methods=['POST'])
-def add_user_favorite(userid):
-    post_favorites = request.get_json()
-    add_favorites = Favorites(user_userid=userid, object_id = post_favorites["object_id"], name=post_favorites["name"])
-    db.session.add(add_favorites)
+@app.route('/get_favorites', methods=['GET'])
+def get_favorites():
+
+    # get all the todos
+    query = Favorites.query.all()
+
+    # map the results and your list of people  inside of the all_people variable
+    results = list(map(lambda x: x.serialize(), query))
+
+    return jsonify(results), 200
+
+@app.route('/users/<int:userid>/get_favorites', methods=['POST'])
+def add_fav(userid):
+    
+    # recibir info del request
+    add_new_fav = request.get_json()
+    newFav = Favorites(user_userid=userid, name=add_new_fav["name"], object_id=add_new_fav["object_id"])
+    db.session.add(newFav)
     db.session.commit()
-    return jsonify(result), 200
 
+    return jsonify("All good"), 200
 
+@app.route('/favorites/<int:favorite_id>', methods=['DELETE'])
+def del_fav(favorite_id):
+
+    # recibir info del request
+    
+    delete_favorite = Favorites.query.get(favorite_id)
+    if delete_favorite is None:
+        raise APIException('Label not found', status_code=404)
+
+    db.session.delete(delete_favorite)
+    db.session.commit()
+
+    return jsonify("All good"), 200
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':

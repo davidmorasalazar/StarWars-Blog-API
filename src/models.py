@@ -19,7 +19,7 @@ class User(db.Model):
         }
 class Favorites(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_userid = db.Column(db.Integer, db.ForeignKey("User.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     name = db.Column(db.String(80))
     object_id = db.Column(db.Integer, nullable=False)
 
@@ -30,7 +30,7 @@ class Favorites(db.Model):
         return {
             "id": self.id,
             "name": self.name,
-            "user_userid": self.user_userid,
+            "user_id": self.user_id,
             "object_id": self.object_id,            
             # do not serialize the password, its a security breach
         }

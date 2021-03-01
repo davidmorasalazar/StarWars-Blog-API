@@ -99,7 +99,7 @@ def handle_character(chaid):
 
 @app.route('/users/<int:userid>/get_favorites', methods=['GET'])
 def get_user_favorite(userid):
-    favorites = Favorites.query.filter_by(user_userid = userid)
+    favorites = Favorites.query.filter_by(user_id = userid)
     # favorites = Favorites.query.all()
     # print(favorites)
     results = list(map(lambda x: x.serialize(), favorites))
@@ -123,7 +123,7 @@ def add_fav(userid):
     
     # recibir info del request
     add_new_fav = request.get_json()
-    newFav = Favorites(user_userid=userid, name=add_new_fav["name"], object_id=add_new_fav["object_id"])
+    newFav = Favorites(user_id=userid, name=add_new_fav["name"], object_id=add_new_fav["object_id"])
     db.session.add(newFav)
     db.session.commit()
 

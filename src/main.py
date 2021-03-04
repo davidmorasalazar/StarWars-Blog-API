@@ -102,7 +102,7 @@ def del_fav(favorite_id):
     
     delete_favorite = Favorites.query.get(favorite_id)
     if delete_favorite is None:
-        raise APIException('Label not found', status_code=404)
+        raise APIException('User not found', status_code=404)
 
     db.session.delete(delete_favorite)
     db.session.commit()
@@ -176,11 +176,10 @@ def register():
 
         user = User()
         user.email = email
+        user.name = name      
         hashed_password = generate_password_hash(password)
         print(password, hashed_password)
-
         user.password = hashed_password
-        user.name = name
         db.session.add(user)
         db.session.commit()
 
@@ -212,6 +211,7 @@ def login():
             "user": user.serialize(),
             "token": access_token,
             "expires": expiracion.total_seconds()*1000
+            # "activo": True
         }
 
         return jsonify(data), 200
@@ -222,7 +222,7 @@ def profile():
     if request.method == 'GET':
         token = get_jwt_identity()
         return jsonify({"success": "Acceso a espacio privado", "usuario": token}), 200
-    
+    return jsonify({"success": "Thanks. your register was successfully", "status": "true"}), 200
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3000))

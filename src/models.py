@@ -17,7 +17,8 @@ class User(db.Model):
         return {
             "id": self.id,
             "email": self.email,
-            "name": self.name,            
+            "name": self.name,  
+            "favs": list(map(lambda x: x.serialize(), self.favs))                      
             # do not serialize the password, its a security breach
         }
 class Favorites(db.Model):
@@ -31,6 +32,7 @@ class Favorites(db.Model):
 
     def serialize(self):
         return {
+            "id": self.id,
             "name": self.name,
             "user_id": self.user_id,
             "object_id": self.object_id,            

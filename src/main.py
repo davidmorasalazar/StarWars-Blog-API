@@ -24,7 +24,7 @@ MIGRATE = Migrate(app, db)
 db.init_app(app)
 CORS(app)
 setup_admin(app)
-
+JWTManager(app)
 # Handle/serialize errors like a JSON object
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
@@ -161,11 +161,14 @@ def register():
     if request.method == 'POST':
         email = request.json.get("email", None)
         password = request.json.get("password", None)
+        name = request.json.get("name", None)
 
         if not email:
             return jsonify({"msg": "email is required"}), 400
         if not password:
             return jsonify({"msg": "Password is required"}), 400
+        if not name:
+            return jsonify({"msg": "name is required"}), 400
 
         user = User.query.filter_by(email=email).first()
         if user:
@@ -177,7 +180,7 @@ def register():
         print(password, hashed_password)
 
         user.password = hashed_password
-
+        user.name = name
         db.session.add(user)
         db.session.commit()
 

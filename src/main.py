@@ -93,7 +93,17 @@ def get_user_favorite(userid):
     # print(results)
     return jsonify(results), 200
     # return jsonify("hola"), 200
-
+@app.route('/favorites/<int:fid>', methods=['PUT'])
+def update_fav(fid):
+    # recibir info del request
+    fav = Favorites.query.get(fid)
+    if fav is None:
+        raise APIException('Favorite not found', status_code=404)
+    request_body = request.get_json()
+    if "name" in request_body:
+        fav.name = request_body["name"]
+    db.session.commit()
+    return jsonify("All good"), 200
 
 @app.route('/favorites/<int:favorite_id>', methods=['DELETE'])
 def del_fav(favorite_id):
@@ -210,8 +220,8 @@ def login():
         data = {
             "user": user.serialize(),
             "token": access_token,
-            "expires": expiracion.total_seconds()*1000
-            # "activo": True
+            "expires": expiracion.total_seconds()*1000,
+            "status": True
         }
 
         return jsonify(data), 200
@@ -222,7 +232,6 @@ def profile():
     if request.method == 'GET':
         token = get_jwt_identity()
         return jsonify({"success": "Acceso a espacio privado", "usuario": token}), 200
-    return jsonify({"success": "Thanks. your register was successfully", "status": "true"}), 200
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3000))
